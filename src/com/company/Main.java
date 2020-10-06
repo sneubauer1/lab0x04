@@ -18,7 +18,8 @@ public class Main {
         if ( X == 0 || X == 1 ){
             return X;
         } else {
-            return fibRecur(X - 1) + fibRecur( X - 2);        }
+            return fibRecur(X - 1) + fibRecur( X - 2);
+        }
 
     }
 }
