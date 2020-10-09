@@ -151,7 +151,6 @@ public class Main {
             } else{
                 System.out.printf("%13s %8s %17s %8.2f %10.2f %20s %7.2f %10.2f %20s %7.2f %10.2f %20s %7.2f %10.2f\n", X,N,fibRecurAverageTimeMeasured,fibRecurDoubleRatio,expectedFibRecurDoubleRatio, fibCacheAverageTimeMeasured, fibCacheDoubleRatio, expectedFibCacheDoubleRatio,fibLoopAverageTimeMeasured,fibLoopDoubleRatio,expectedFibLoopDoubleRatio,fibMatrixAverageTimeMeasured,fibMatrixDoubleRatio,expectedFibMatrixDoubleRatio);
             }
-
         }
 
 
