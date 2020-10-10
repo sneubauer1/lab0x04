@@ -8,12 +8,15 @@ public class Main {
 
     public static void main(String[] args) {
 
-        int X = 1;
-        double N = 0;
-        N = Math.ceil(log2((X+1)));
+        int X = 92;
+
 
         long result;
         runTimeTests();
+
+        //result = fibMatrix(X);
+        //System.out.println("\n"+X+": "+result+" is the last fib(x) that can be displayed in 64 bits \n");
+
         /*result = fibRecur(X);
         System.out.println("\nfibRecur "+result+"\n");
         result = fibCache(X);
@@ -36,15 +39,19 @@ public class Main {
     public static void runTimeTests( ){
 
         int X;
-        int X_Max = 90;
+        int X_Max = 5000;
         int N;
         int i = 0;
+        int fibRecurX_MAX = 46;
         long totalTime = 0;
         long maxTime = 10000000;
         long trialCount = 0;
-        long maxTrials = 10000;
+        long maxTrials = 1000000000;//999999999;
         long timeStampBefore = 0;
         long timeStampAfter = 0;
+        long doNothingTimeStampBefore = 0;
+        long doNothingTimeStampAfter = 0;
+        long doNothingTimeMeasured = 0;
         long timeMeasured = 0;
         long fibRecurAverageTimeMeasured = 0;
         long fibCacheAverageTimeMeasured = 0;
@@ -64,54 +71,80 @@ public class Main {
         double expectedFibMatrixDoubleRatio = 0;
 
         /**Print Column Headings**/
-        System.out.printf("\n%13s %8s %20s %7s %10s %20s %7s %10s %20s %7s %10s %20s %7s %10s\n", "X","N","FibRecur Time","DR","Exp. DR", "FibCache Time", "DR", "Exp. DR","FibLoop Time","DR","Exp. DR","FibMatrix Time","DR","Exp. DR");
+        System.out.printf("\n%13s %8s %17s %9s %10s %20s %7s %10s %20s %7s %10s %20s %7s %10s\n", "X","N","FibRecur Time","DR","Exp. DR", "FibCache Time", "DR", "Exp. DR","FibLoop Time","DR","Exp. DR","FibMatrix Time","DR","Exp. DR");
         System.out.printf("%185s\n", "-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
 
-        for ( X = 1; X <= X_Max; X++ ){
+        for ( X = 1; X <= X_Max; X++ ) {
 
             totalTime = 0;
             trialCount = 0;
             // Time trial for fibRecur
-            while ( totalTime < maxTime && trialCount < maxTrials ){
+            while (totalTime < maxTime && trialCount < maxTrials) {
+                if (X >= fibRecurX_MAX) {
+                    trialCount = 1;
+                    totalTime = 0;
+                    break;
+                }
                 timeStampBefore = getCpuTime();
                 fibRecur(X);
                 timeStampAfter = getCpuTime();
+
+                //doNothingTimeStampBefore = getCpuTime();
+                //doNothingTimeStampAfter = getCpuTime();
+                //doNothingTimeMeasured = doNothingTimeStampAfter - doNothingTimeStampBefore;
+                //timeMeasured = timeStampAfter - timeStampBefore - doNothingTimeMeasured;
                 timeMeasured = timeStampAfter - timeStampBefore;
                 totalTime = totalTime + timeMeasured;
                 trialCount++;
             }
-            fibRecurAverageTimeMeasured = totalTime / trialCount;
+
+            fibRecurAverageTimeMeasured = (totalTime / trialCount) ;
             fibRecurTimeResults[X] = fibRecurAverageTimeMeasured;
-            if ( X%2 == 0){
-                fibRecurDoubleRatio = (double) fibRecurTimeResults[X]/fibRecurTimeResults[(X/2)];
-                expectedFibRecurDoubleRatio = (double) fibRecur(X) / fibRecur(X/2);
+            if (X % 2 == 0) {
+                fibRecurDoubleRatio = (double) fibRecurTimeResults[X] / fibRecurTimeResults[(X / 2)];
+                // expectedFibRecurDoubleRatio = (double) fibRecur(X) / fibRecur(X/2);
+                expectedFibRecurDoubleRatio = Math.pow(1.61803398875, X) / Math.pow(1.61803398875, (X / 2));
+            }
+            if (X >= fibRecurX_MAX) {
+                fibRecurDoubleRatio = 0;
+                expectedFibRecurDoubleRatio = 0;
             }
 
             totalTime = 0;
             trialCount = 0;
             // Time trial for fibCache
-            while ( totalTime < maxTime && trialCount < maxTrials ){
+            while (totalTime < maxTime && trialCount < maxTrials) {
                 timeStampBefore = getCpuTime();
                 fibCache(X);
                 timeStampAfter = getCpuTime();
+
+                //doNothingTimeStampBefore = getCpuTime();
+                //doNothingTimeStampAfter = getCpuTime();
+                //doNothingTimeMeasured = doNothingTimeStampAfter - doNothingTimeStampBefore;
+                //timeMeasured = timeStampAfter - timeStampBefore - doNothingTimeMeasured;
                 timeMeasured = timeStampAfter - timeStampBefore;
                 totalTime = totalTime + timeMeasured;
                 trialCount++;
             }
             fibCacheAverageTimeMeasured = totalTime / trialCount;
             fibCacheTimeResults[X] = fibCacheAverageTimeMeasured;
-            if ( X%2 == 0){
-                fibCacheDoubleRatio = (double) fibCacheTimeResults[X]/fibCacheTimeResults[(X/2)];
-                expectedFibCacheDoubleRatio = (double) X / (X/2);
+            if (X % 2 == 0) {
+                fibCacheDoubleRatio = (double) fibCacheTimeResults[X] / fibCacheTimeResults[(X / 2)];
+                expectedFibCacheDoubleRatio = (double) X / (X / 2);
             }
 
             totalTime = 0;
             trialCount = 0;
             // Time trial for fibLoop
-            while ( totalTime < maxTime && trialCount < maxTrials ){
+            while (totalTime < maxTime && trialCount < maxTrials) {
                 timeStampBefore = getCpuTime();
                 fibLoop(X);
                 timeStampAfter = getCpuTime();
+
+                //doNothingTimeStampBefore = getCpuTime();
+                //doNothingTimeStampAfter = getCpuTime();
+                //doNothingTimeMeasured = doNothingTimeStampAfter - doNothingTimeStampBefore;
+                //timeMeasured = timeStampAfter - timeStampBefore - doNothingTimeMeasured;
                 timeMeasured = timeStampAfter - timeStampBefore;
                 totalTime = totalTime + timeMeasured;
                 trialCount++;
@@ -119,18 +152,23 @@ public class Main {
             fibLoopAverageTimeMeasured = totalTime / trialCount;
             fibLoopTimeResults[X] = fibLoopAverageTimeMeasured;
 
-            if ( X%2 == 0){
-                fibLoopDoubleRatio = (double) fibLoopTimeResults[X]/fibLoopTimeResults[(X/2)];
-                expectedFibLoopDoubleRatio = (double) X / (X/2);
+            if (X % 2 == 0) {
+                fibLoopDoubleRatio = (double) fibLoopTimeResults[X] / fibLoopTimeResults[(X / 2)];
+                expectedFibLoopDoubleRatio = (double) X / (X / 2);
             }
 
             totalTime = 0;
             trialCount = 0;
             // Time trial for fibMatrix
-            while ( totalTime < maxTime && trialCount < maxTrials ){
+            while (totalTime < maxTime && trialCount < maxTrials) {
                 timeStampBefore = getCpuTime();
                 fibMatrix(X);
                 timeStampAfter = getCpuTime();
+
+                //doNothingTimeStampBefore = getCpuTime();
+                //doNothingTimeStampAfter = getCpuTime();
+                //doNothingTimeMeasured = doNothingTimeStampAfter - doNothingTimeStampBefore;
+                //timeMeasured = timeStampAfter - timeStampBefore - doNothingTimeMeasured;
                 timeMeasured = timeStampAfter - timeStampBefore;
                 totalTime = totalTime + timeMeasured;
                 trialCount++;
@@ -138,18 +176,25 @@ public class Main {
             fibMatrixAverageTimeMeasured = totalTime / trialCount;
             fibMatrixTimeResults[X] = fibMatrixAverageTimeMeasured;
 
-            if ( X%2 == 0 && X != 2 ){
-                fibMatrixDoubleRatio = (double) fibMatrixTimeResults[X]/fibMatrixTimeResults[(X/2)];
+            if (X % 2 == 0 && X != 2) {
+                fibMatrixDoubleRatio = (double) fibMatrixTimeResults[X] / fibMatrixTimeResults[(X / 2)];
                 expectedFibMatrixDoubleRatio = (double) log2(X) / log2(X - 1);
             }
 
 
-            N = (int) Math.ceil(log2(X+1));
-            if ( X == 1 || X%2 != 0 ) {
+            N = (int) Math.ceil(log2(X + 1));
+            if (X == 1) {
                 String notApplicable = "na";
-                System.out.printf("%13s %8s %17s %8s %10s %20s %7s %10s %20s %7s %10s %20s %7s %10s\n", X, N, fibRecurAverageTimeMeasured, notApplicable, notApplicable, fibCacheAverageTimeMeasured, notApplicable, notApplicable, fibLoopAverageTimeMeasured, notApplicable, notApplicable, fibMatrixAverageTimeMeasured, notApplicable, notApplicable);
-            } else{
-                System.out.printf("%13s %8s %17s %8.2f %10.2f %20s %7.2f %10.2f %20s %7.2f %10.2f %20s %7.2f %10.2f\n", X,N,fibRecurAverageTimeMeasured,fibRecurDoubleRatio,expectedFibRecurDoubleRatio, fibCacheAverageTimeMeasured, fibCacheDoubleRatio, expectedFibCacheDoubleRatio,fibLoopAverageTimeMeasured,fibLoopDoubleRatio,expectedFibLoopDoubleRatio,fibMatrixAverageTimeMeasured,fibMatrixDoubleRatio,expectedFibMatrixDoubleRatio);
+                System.out.printf("%13s %8s %17s %9s %10s %20s %7s %10s %20s %7s %10s %20s %7s %10s\n", X, N, fibRecurAverageTimeMeasured, notApplicable, notApplicable, fibCacheAverageTimeMeasured, notApplicable, notApplicable, fibLoopAverageTimeMeasured, notApplicable, notApplicable, fibMatrixAverageTimeMeasured, notApplicable, notApplicable);
+            } else if(X >= fibRecurX_MAX ) {
+                String notApplicable = "na";
+                System.out.printf("%13s %8s %17s %9s %10s %20s %7.2f %10.2f %20s %7.2f %10.2f %20s %7.2f %10.2f\n", X, N, notApplicable, notApplicable, notApplicable, fibCacheAverageTimeMeasured, fibCacheDoubleRatio, expectedFibCacheDoubleRatio, fibLoopAverageTimeMeasured, fibLoopDoubleRatio, expectedFibLoopDoubleRatio, fibMatrixAverageTimeMeasured, fibMatrixDoubleRatio, expectedFibMatrixDoubleRatio);
+            }  else if(X%2 !=0) {
+                String notApplicable = "na";
+                System.out.printf("%13s %8s %17s %9s %10s %20s %7s %10s %20s %7s %10s %20s %7s %10s\n", X, N, fibRecurAverageTimeMeasured, notApplicable, notApplicable, fibCacheAverageTimeMeasured, notApplicable, notApplicable, fibLoopAverageTimeMeasured, notApplicable, notApplicable, fibMatrixAverageTimeMeasured, notApplicable, notApplicable);
+            }
+            else{
+                System.out.printf("%13s %8s %17s %9.2f %10.2f %20s %7.2f %10.2f %20s %7.2f %10.2f %20s %7.2f %10.2f\n", X,N,fibRecurAverageTimeMeasured,fibRecurDoubleRatio,expectedFibRecurDoubleRatio, fibCacheAverageTimeMeasured, fibCacheDoubleRatio, expectedFibCacheDoubleRatio,fibLoopAverageTimeMeasured,fibLoopDoubleRatio,expectedFibLoopDoubleRatio,fibMatrixAverageTimeMeasured,fibMatrixDoubleRatio,expectedFibMatrixDoubleRatio);
             }
         }
 
@@ -230,10 +275,10 @@ public class Main {
             return;
         }
         long mat[][] = new long[][]{{1, 1}, {1,0}};
-
+        // raise the matrix to the desired power
         matrixPOW( fib, X/2 );
         matrixMultiply( fib, fib );
-
+        // if X is odd
         if ( X%2 != 0 ){
             matrixMultiply( fib, mat );
         }
